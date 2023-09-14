@@ -98,15 +98,17 @@
       </div>
     </div>
     <div class="w-full text-center ">
-      <form method="get" action="/search" class="">
-        <input
-          name="q"
-          type="text"
-          placeholder="Find players by BattleTag#1234..."
-          class="bg-black border-primary border-2 border-solid text-white text-xl p-4 rounded-md shadow-lg focus:outline-none w-full md:w-[75%]"
-          value=""
-        />
-      </form>
+     <form method="get" action="/leadersboard"  class="">
+  <input
+    
+    name="q"
+    type="text"
+    placeholder="Find players by BattleTag#1234..."
+    class="bg-black border-primary border-2 border-solid text-white text-xl p-4 rounded-md shadow-lg focus:outline-none w-full md:w-[75%]"
+    id="mySearch"
+  />
+</form>
+
     </div>
     <div v-if="authStore.isLoggedIn === false" class="h-12 flex justify-center items-center">
       <router-link rel="nofollow" to="/login"
@@ -155,30 +157,23 @@
   </div>
 </template>
 
-<script setup> 
-import { ref, onMounted } from "vue";
+
+
+
+
+
+
+<script setup>
+import { ref } from "vue";
 import client from "../axios.config";
-import image1 from '@/assets/images/image1.jpeg';
-import image2 from '@/assets/images/image21.png';
-import image3 from '@/assets/images/image30.png';
+import image1 from "@/assets/images/image1.jpeg";
+import image2 from "@/assets/images/image21.png";
+import image3 from "@/assets/images/image30.png";
 import { useAuthenticate } from "../store/Authenticate";
 
 const barObj = ref({});
-
+const searchText = ref('');
 const authStore = useAuthenticate();
-console.log( authStore.userId, 'nice' )
 
-onMounted(async () => {
-  try {
-    const response = await client.get("/users");
-    // console.log(response.TotalClosedTickets, 'n');
-    barObj.value = response;
-
-    console.log(barObj.value);
-  } catch (error) {
-    console.error(error);
-  }
-});
 </script>
 
-<style lang="scss" scoped></style>

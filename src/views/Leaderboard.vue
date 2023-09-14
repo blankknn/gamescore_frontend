@@ -59,7 +59,11 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from 'vue-router'; 
+const router = useRouter();
 import client from "../axios.config";
+
+
 const statuses = { Completed: 'text-green-400 bg-green-400/10', Error: 'text-rose-400 bg-rose-400/10' }
 const activityItems = [
   {
@@ -108,31 +112,42 @@ const activityItems = [
   },
 
 ]
-
 const barObj = ref([]);
 const rank = ref([
   'st', 'nd', 'rd'
 ]);
 
+// Define a filterUsers function to encapsulate the filtering logic
+const filterUsers = (query) => {
+  return barObj.value.filter(user => {
+    const emailMatch = user.email.toLowerCase().includes(query);
+    const nameMatch = user.name.toLowerCase().includes(query);
+    return (emailMatch || nameMatch) && user.isVerified;
+  });
+};
+
 onMounted(async () => {
   try {
     const response = await client.get("/users");
-    // console.log(response.TotalClosedTickets, 'n');
     barObj.value = response;
-    barObj.value = barObj.value.sort((a, b) => {
-      if (!a.isVerified) {
-        a.score = 0;
-      }
-      if (!b.isVerified) {
-        b.score = 0;
-      }
-      return (((a.score) < (b.score)) ? 1 : -1);
-    })
-    console.log(barObj.value);
+
+    // const inputField = document.getElementById("mySearch");
+    // inputField.addEventListener("input", () => {
+    //   const query = inputField.value.trim().toLowerCase();
+
+    if(router.currentRoute.value.query.q){
+      barObj.value = filterUsers(router.currentRoute.value.query.q);
+          
+    }
+
+    barObj.value.sort((a, b) => b.score - a.score);
+
+
+      console.log(this.$route.query.test);
+    // });
   } catch (error) {
     console.error(error);
   }
 });
-
 
 </script>
