@@ -59,7 +59,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useRouter } from 'vue-router'; 
+import { useRouter } from 'vue-router';
 const router = useRouter();
 import client from "../axios.config";
 
@@ -135,15 +135,14 @@ onMounted(async () => {
     // inputField.addEventListener("input", () => {
     //   const query = inputField.value.trim().toLowerCase();
 
-    if(router.currentRoute.value.query.q){
+    if (router.currentRoute.value.query.q) {
       barObj.value = filterUsers(router.currentRoute.value.query.q);
-          
+
     }
 
-    barObj.value.sort((a, b) => b.score - a.score);
+    barObj.value.sort((a, b) => {(b.score * b.isVerified) - (a.score * b.isVerified)});
 
 
-      console.log(this.$route.query.test);
     // });
   } catch (error) {
     console.error(error);
